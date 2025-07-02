@@ -37,7 +37,7 @@ def thank_you(request, feedback_id):
 
 def admin_dashboard(request):
     feedbacks = Feedback.objects.all()
-    harsh_words = ['bad', 'worst', 'stupid', 'nonsense']  # Add your own list
+    harsh_words = ['bad', 'worst', 'stupid', 'nonsense']  
 
     for fb in feedbacks:
         comment_words = fb.comment.split()

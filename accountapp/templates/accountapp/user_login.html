@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Login</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1f4037, #99f2c8);
+            font-family: 'Segoe UI', sans-serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            color: white;
+            font-size: 18px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .navbar a:hover {
+            color: #ffdd57;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 400px;
+            color: white;
+            margin: auto;
+        }
+
+        h2 {
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form p {
+            margin: 0;
+        }
+
+        input {
+            padding: 14px;
+            margin: 12px 0;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #333;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input::placeholder {
+            color: #666;
+        }
+
+        button {
+            background: linear-gradient(to right, #43cea2, #185a9d);
+            color: white;
+            font-weight: bold;
+            padding: 14px;
+            margin-top: 20px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(to right, #185a9d, #43cea2);
+            transform: scale(1.03);
+        }
+
+        .note {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .note a {
+            color: #ffeb3b;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .note a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div><a href="{% url 'landing' %}"><strong>HOME</strong></a></div>
+        <div>
+            <a href="{% url 'admin_login' %}">Admin Login</a>
+            <a href="{% url 'admin_signup' %}">Admin Signup</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>User Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                {{ field }}
+            {% endfor %}
+            <button type="submit">Login</button>
+        </form>
+        <p class="note">Don't have an account? <a href="{% url 'user_signup' %}">Signup</a></p>
+    </div>
+</body>
+</html>

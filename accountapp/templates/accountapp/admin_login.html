@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            font-family: 'Segoe UI', sans-serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            color: white;
+            font-size: 18px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .navbar a:hover {
+            color: #ffdd57;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            padding: 65px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            width: 400px;
+            color: white;
+            text-align: center;
+            margin: auto;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input, button {
+            padding: 10px;
+            margin: 25px 0;
+            border-radius: 6px;
+            border: none;
+            font-size: 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input {
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #333;
+        }
+
+        button {
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
+            transform: scale(1.04);
+        }
+
+        .message {
+            margin-bottom: 8px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .signup-link {
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        .signup-link a {
+            color: #ffdd57;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div><a href="{% url 'landing' %}"> HOME</a></div>
+        <div>
+            <a href="{% url 'user_login' %}"> User Login</a>
+            <a href="{% url 'user_signup' %}"> User Signup</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Admin Login</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                {{ field }}
+            {% endfor %}
+            <button type="submit">Login</button>
+        </form>
+
+        <div class="signup-link">
+            Don't have an admin account? <a href="{% url 'admin_signup' %}">Signup here</a>
+        </div>
+    </div>
+
+    {% if error %}
+    <script>
+        alert("{{ error }}");
+    </script>
+    {% endif %}
+
+</body>
+</html>

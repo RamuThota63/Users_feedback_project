@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Give Feedback</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #141e30, #243b55); 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #f1f1f1;
+        }
+
+        h2 {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 3px black;
+        }
+
+        p {
+            font-size: 15px;
+            color: #ccc;
+            margin-bottom: 25px;
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 18px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+            width: 450px;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .star {
+            font-size: 42px;
+            cursor: pointer;
+            color: #555;
+            transition: color 0.3s ease;
+        }
+
+        .star.hovered,
+        .star.selected {
+            color: #ffd700; /* Gold */
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 12px;
+            margin-top: 25px;
+            font-size: 15px;
+            border-radius: 10px;
+            border: none;
+            background: #2c3e50;
+            color: white;
+            box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.3);
+            resize: none;
+        }
+
+        textarea::placeholder {
+            color: #aaa;
+            font-style: italic;
+        }
+
+        button, .logout-button {
+            margin-top: 20px;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        button {
+            background: linear-gradient(to right, #ffb347, #ffcc33); /* Gold-orange */
+            color: #1a1a1a;
+        }
+
+        button:hover {
+            background: linear-gradient(to right, #ffcc33, #ffb347);
+            transform: scale(1.03);
+        }
+
+        .logout-button {
+            display: inline-block;
+            background: linear-gradient(to right, #ff4e50, #f44336); /* Rich red */
+            color: white;
+            text-decoration: none;
+            margin-top: 15px;
+        }
+
+        .logout-button:hover {
+            background: linear-gradient(to right, #e53935, #d32f2f);
+            transform: scale(1.03);
+        }
+
+        .emoji {
+            font-size: 30px;
+            margin-top: 10px;
+        }
+
+        #desc {
+            font-weight: bold;
+            margin-top: 5px;
+            font-size: 15px;
+            color: #ffc107;
+        }
+
+        .error {
+            color: #ff6f61;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Welcome, {{ request.user.username }} ✨</h2>
+    <p>Your feedback helps us improve!</p>
+
+    <form method="post" id="feedback-form" onsubmit="return validateForm()">
+        {% csrf_token %}
+        <input type="hidden" name="rating" id="rating" value="0">
+        <input type="hidden" name="emoji" id="emoji" value="">
+
+        <div id="stars">
+            <span class="star" data-value="1">&#9733;</span>
+            <span class="star" data-value="2">&#9733;</span>
+            <span class="star" data-value="3">&#9733;</span>
+            <span class="star" data-value="4">&#9733;</span>
+            <span class="star" data-value="5">&#9733;</span>
+        </div>
+
+        <div class="emoji" id="emoji-display"></div>
+        <div id="desc"></div>
+
+        <textarea name="text" id="comment" placeholder="Share your experience here..."></textarea>
+
+        <div id="error-msg" class="error"></div>
+
+        <button type="submit">Submit Feedback</button><br>
+        <a href="{% url 'logout' %}" class="logout-button">Logout</a>
+    </form>
+
+    <script>
+        const stars = document.querySelectorAll('.star');
+        const ratingInput = document.getElementById('rating');
+        const emojiInput = document.getElementById('emoji');
+        const emojiDisplay = document.getElementById('emoji-display');
+        const descDisplay = document.getElementById('desc');
+
+        const descriptions = ['Terrible', 'Bad', 'Okay', 'Good', 'Excellent'];
+        const emojis = ['😡', '😞', '😐', '😊', '🤩'];
+        let selectedRating = 0;
+
+        stars.forEach((star, index) => {
+            star.addEventListener('mouseenter', () => highlightStars(index));
+            star.addEventListener('mouseleave', () => highlightStars(selectedRating - 1));
+            star.addEventListener('click', () => {
+                selectedRating = index + 1;
+                ratingInput.value = selectedRating;
+                emojiInput.value = emojis[index];
+                emojiDisplay.textContent = emojis[index];
+                descDisplay.textContent = descriptions[index];
+            });
+        });
+
+        function highlightStars(index) {
+            stars.forEach((star, i) => {
+                if (i <= index) {
+                    star.classList.add('hovered');
+                } else {
+                    star.classList.remove('hovered');
+                }
+            });
+        }
+
+        function validateForm() {
+            const rating = parseInt(ratingInput.value);
+            const comment = document.getElementById('comment').value.trim();
+            const errorMsg = document.getElementById('error-msg');
+
+            if (rating < 1) {
+                errorMsg.textContent = "Please select a star rating.";
+                return false;
+            }
+            if (comment === "") {
+                errorMsg.textContent = "Please enter your feedback.";
+                return false;
+            }
+
+            errorMsg.textContent = "";
+            return true;
+        }
+    </script>
+</body>
+</html>

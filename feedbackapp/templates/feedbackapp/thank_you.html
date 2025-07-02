@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thank You</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #141e30, #243b55); 
+            font-family: 'Lucida Sans', 'Lucida Grande', Verdana, sans-serif;
+            text-align: center;
+            padding-top: 100px;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        h2 {
+            font-size: 26px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        .emoji {
+            font-size: 60px;
+        }
+
+        .logout-btn {
+            display: inline-block;
+            margin-top: 50px;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white;
+            padding: 12px 28px;
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(to right, #ff4b2b, #ff416c);
+            transform: scale(1.05);
+        }
+
+        .congrats {
+            font-size: 34px;
+            color: #d500f9;
+            font-weight: bold;
+            animation: pop 0.8s ease-out;
+            margin-bottom: 20px;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1.2); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    {% if feedback.rating == 5 %}
+        <div class="emoji">🥳</div>
+        <div class="congrats">🎉 Bingooo!!! 🎉</div>
+        <h2>Thank You for your amazing feedback!</h2>
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+        <script>
+            
+            confetti({
+                particleCount: 150,
+                spread: 90,
+                origin: { y: 0.6 }
+            });
+        </script>
+
+    {% elif feedback.rating < 5 and not feedback.contains_bad_words %}
+        <div class="emoji">🙂</div>
+        <h2>Thank You for your feedback.<br>We apologize for your inconvenience.</h2>
+
+    {% elif feedback.rating <= 3 and feedback.contains_bad_words %}
+        <div class="emoji">😔</div>
+        <h2>Thank You for your feedback.<br>We apologize for your inconvenience.<br>Also, please avoid harsh words.</h2>
+    {% endif %}
+
+    <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+
+</body>
+</html>
